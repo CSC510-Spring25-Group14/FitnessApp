@@ -10,10 +10,10 @@
 <br>
 <br>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/CSC510-Spring25-Group14/FitnessApp/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/945108490.svg)](https://doi.org/10.5281/zenodo.15160788)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
-[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/CSC510-Spring25-Group14/FitnessApp/main)](https://img.shields.io/github/last-commit/CSC510-Spring25-Group14/FitnessApp/main)
+[![GitHub last commit (branch)](https://img.shields.io/github/last-commit/CSC510-Spring25-Group14/FitnessApp/main)](https://github.com/CSC510-Spring25-Group14/FitnessApp/commits/main)
 [![Python application](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/python-app.yml/badge.svg)](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/python-app.yml)
 [![Lint](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/syntax_checker.yml/badge.svg)](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/syntax_checker.yml)
 [![Pylint](https://img.shields.io/github/actions/workflow/status/CSC510-Spring25-Group14/FitnessApp/pylint.yml?style=flat-square)](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/pylint.yml)
