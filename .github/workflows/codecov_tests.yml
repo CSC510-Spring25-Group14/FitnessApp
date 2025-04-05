@@ -50,4 +50,4 @@ jobs:
 
       - name: Upload coverage to Coveralls  
         run: |
-          COVERALLS_REPO_TOKEN=KcGcp3HNZgg3yAx55JcK4W5odrMvdKP3j coveralls
+          COVERALLS_REPO_TOKEN=${{ secrets.COVERALLS_REPO_TOKEN }} coveralls
