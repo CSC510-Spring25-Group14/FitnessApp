@@ -22,7 +22,7 @@
 ![Stars](https://img.shields.io/github/stars/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
 ![Issues](https://img.shields.io/github/issues/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
 ![PR](https://img.shields.io/github/issues-pr/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
-![Contributors](https://img.shields.io/github/contributors/S25-CSC510-Group10/FitnessApp?style=flat-square)
+![Contributors](https://img.shields.io/github/contributors/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
 ![Commit](https://img.shields.io/github/commit-activity/w/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
 ![Repo Size](https://img.shields.io/github/repo-size/CSC510-Spring25-Group14/FitnessApp?style=flat-square)
 [![Run tests and upload coverage](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/codecov_tests.yml/badge.svg?branch=development)](https://github.com/CSC510-Spring25-Group14/FitnessApp/actions/workflows/codecov_tests.yml)
