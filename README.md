@@ -1,16 +1,16 @@
 # CSC510 Project 2 - Group 10
 
 ### Team Members
-- Hank Lenham
-- Ryan McPhee
-- Lawrence Stephenson
+- Shivang Nithinkumar Patel
+- Neel Ghoshal
+- Mano Prakash Parthasarathi
 
 # The new stuff we added! And fixed, and refactored, and... well, you get it.
 [Demo Video](https://drive.google.com/file/d/1-92R7eB7o5IQaQgNukk9kp4yPzkffn4j/view)
 <br>
 <br>
 
-[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/CSC510-Spring25-Group14/FitnessApp)](https://github.com/CSC510-Spring25-Group14/FitnessApp/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/692868088.svg)](https://zenodo.org/doi/10.5281/zenodo.10023046)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![GitHub last commit (branch)](https://img.shields.io/github/last-commit/S25-CSC510-Group10/FitnessApp/main)](https://img.shields.io/github/last-commit/S25-CSC510-Group10/FitnessApp/main)
