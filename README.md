@@ -183,11 +183,11 @@ https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows
 Step 2:
 Git Clone the Repository
 
-    git clone https://github.com/S25-CSC510-Group10/FitnessApp.git
+    git clone https://github.com/CSC510-Spring25-Group14/FitnessApp.git
 
 (OR) Download the .zip file on your local machine
 
-    https://github.com/S25-CSC510-Group10/FitnessApp.git
+    https://github.com/CSC510-Spring25-Group14/FitnessApp.git
 
 Step 3:
 Install the required packages by running the following command in the terminal
@@ -214,7 +214,7 @@ You may run into dependency issues given there are a significant amount of packa
 # Source Code
 
 Link to the repository:
-https://github.com/S25-CSC510-Group10/FitnessApp/
+https://github.com/CSC510-Spring25-Group14/FitnessApp/
 
 # Future Scope
 
