@@ -22,6 +22,7 @@ from flask_mail import Mail
 from flask_pymongo import PyMongo
 from tabulate import tabulate
 from achievements import updateAchievments, getAchievements
+from insights import get_insights
 from forms import (
     HistoryForm,
     RegistrationForm,
@@ -372,6 +373,19 @@ def achievements():
         return redirect(url_for("login"))
     # return render_template('user_profile.html', status=True, form=form)#
 
+
+@app.route("/insights", methods=["GET", "POST"])
+def insights():
+    """
+    Display the insights from user data
+    """
+
+    if session.get("email"):
+        email = session.get("email")
+        user_insights, water_intake_data, calorie_intake_data, burnout_data = get_insights(email, mongo.db)
+        return render_template("insights.html", insights = user_insights, water_intake_data = water_intake_data, calorie_intake_data = calorie_intake_data, burnout_data = burnout_data)
+    else:
+        return redirect(url_for("login"))
 
 @app.route("/user_profile", methods=["GET", "POST"])
 def user_profile():
