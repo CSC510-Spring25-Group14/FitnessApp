@@ -283,3 +283,77 @@ def get_avg_water_intake(email, db):
   avg_water_data = {"name": "Average Water Intake per day", "data": avg_water_in_a_day, "description": description}
 
   return avg_water_data
+
+def get_max_burnout(email, db):
+  """
+    Get the Maximum Burnout consumed by the current user in a day
+  """
+  max_burnout_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "totalBurnout": {"$sum": "$burnout"}}},
+    {"$sort": {"totalBurnout": -1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "burnout": "$totalBurnout"}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(max_burnout_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["burnout"] > 0:
+    max_burnout_in_a_day = query_output_list[0]["burnout"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    max_burnout_in_a_day = 0
+    description = "No records on burnout"
+
+  max_burnout_data = {"name": "Maximum Burnout Calories in a day", "data": max_burnout_in_a_day, "description": description}
+
+  return max_burnout_data
+
+def get_min_burnout(email, db):
+  """
+    Get the Minimum Burnout consumed by the current user in a day
+  """
+  min_burnout_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "totalBurnout": {"$sum": "$burnout"}}},
+    {"$sort": {"totalBurnout": -1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "burnout": "$totalBurnout"}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(min_burnout_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["burnout"] > 0:
+    min_burnout_in_a_day = query_output_list[0]["burnout"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    min_burnout_in_a_day = 0
+    description = "No records on burnout"
+
+  min_burnout_data = {"name": "Maximum Burnout Calories in a day", "data": min_burnout_in_a_day, "description": description}
+
+  return min_burnout_data
+
+def get_avg_burnout(email, db):
+  """
+    Get the Average Burnout by the current user in a day
+  """
+  avg_burnout_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "dailyTotal": {"$sum": "$burnout"}}},
+    {"$group": {"_id": None, "averageBurnout": {"$avg": "$dailyTotal"}}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(avg_burnout_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["averageBurnout"] > 0:
+    avg_burnout_in_a_day = floor(query_output_list[0]["averageBurnout"])
+    if avg_burnout_in_a_day > 2900 or avg_burnout_in_a_day < 1500:
+      description = "Recommended a burnout of about 2000 calories in a day"
+    else:
+      description = "You're doing great !"
+
+  avg_burnout_data = {"name": "Average Burnout Calories per day", "data": avg_burnout_in_a_day, "description": description}
+
+  return avg_burnout_data
+
