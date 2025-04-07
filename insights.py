@@ -357,3 +357,65 @@ def get_avg_burnout(email, db):
 
   return avg_burnout_data
 
+def get_chart_data(email, db, data_type):
+  """
+    Get the past 7 days data of the current user
+  """
+
+  try:
+    # Calculate date range (last 7 days inclusive)
+    end_date = datetime.now(timezone.utc) - timedelta(hours=4) - timedelta(days=1)
+    start_date = end_date - timedelta(days=6)  # 7 days including today
+    start_date_str = start_date.strftime("%Y-%m-%d")
+    end_date_str = end_date.strftime("%Y-%m-%d")
+
+    if data_type == "water":
+      pipeline = [
+          {"$match": {
+              "email": email,
+              "time": {"$gte": start_date, "$lte": end_date}
+          }},
+          {"$addFields": {
+              "numericValue": {"$toInt": "$intake"}
+          }},
+          {"$group": {
+              "_id": {"$dateToString": {
+                  "format": "%Y-%m-%d",
+                  "date": "$time",
+                  "timezone": "+00:00"
+              }},
+              "total": {"$sum": "$numericValue"}
+          }},
+          {"$sort": {"_id": 1}}
+        ]
+      results = list(db.intake_collection.aggregate(pipeline))
+    else:
+      value_field = "$" + str(data_type)
+      pipeline = [
+        {"$match": {"email": email, "date": {"$gte": start_date_str, "$lte": end_date_str}}},
+        {"$addFields": {"numericValue": {"$toInt": value_field}}},
+        {"$group": {"_id": "$date", "total": {"$sum": "$numericValue"}}},
+        {"$sort": {"_id": 1}}
+      ]
+
+      results = list(db.calories.aggregate(pipeline))
+    
+    # Convert to date:value dictionary
+    user_data = {item['_id']: item['total'] for item in results}
+    
+    # Generate labels for last 7 days
+    date_labels = [
+        (end_date - timedelta(days=i)).strftime("%Y-%m-%d")
+        for i in range(6, -1, -1)
+    ]
+    
+    # Fill missing dates with 0
+    chart_data = [user_data.get(date, 0) for date in date_labels]
+    
+    return {
+      "labels": date_labels,
+      "values": chart_data
+    }
+  
+  except Exception as e:
+    return {"error": str(e)}
