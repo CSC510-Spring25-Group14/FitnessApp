@@ -133,7 +133,7 @@ def get_max_calorie(email, db):
   
   query_output_list = list(db.calories.aggregate(max_calorie_pipeline))
   
-  if query_output_list[0]["calories"] > 0:
+  if len(query_output_list) > 0 and query_output_list[0]["calories"] > 0:
     max_calorie_in_a_day = query_output_list[0]["calories"]
     description = "On " + convert_date_to_words(query_output_list[0]["date"])
   else:
@@ -158,7 +158,7 @@ def get_min_calorie(email, db):
   
   query_output_list = list(db.calories.aggregate(min_calorie_pipeline))
   
-  if query_output_list[0]["calories"] > 0:
+  if len(query_output_list) > 0 and query_output_list[0]["calories"] > 0:
     min_calorie_in_a_day = query_output_list[0]["calories"]
     description = "On " + convert_date_to_words(query_output_list[0]["date"])
   else:
@@ -181,7 +181,7 @@ def get_avg_calorie_intake(email, db):
   
   query_output_list = list(db.calories.aggregate(avg_calorie_pipeline))
   
-  if query_output_list[0]["averageCalories"] > 0:
+  if len(query_output_list) > 0 and query_output_list[0]["averageCalories"] > 0:
     avg_calorie_in_a_day = floor(query_output_list[0]["averageCalories"])
     if avg_calorie_in_a_day > 2100 or avg_calorie_in_a_day < 1900:
       description = "Recommended 2000 calories in a day"
@@ -352,6 +352,9 @@ def get_avg_burnout(email, db):
       description = "Recommended a burnout of about 2000 calories in a day"
     else:
       description = "You're doing great !"
+  else:
+    avg_burnout_in_a_day = 0
+    description = "No records on Water intake"
 
   avg_burnout_data = {"name": "Average Burnout Calories per day", "data": avg_burnout_in_a_day, "description": description}
 
