@@ -194,3 +194,92 @@ def get_avg_calorie_intake(email, db):
   avg_calorie_data = {"name": "Minimum Calories in a day", "data": avg_calorie_in_a_day, "description": description}
 
   return avg_calorie_data
+
+def get_max_water_intake(email, db):
+  """
+    Get the Maximum amount of Water Intake by the current user in a day
+  """
+  max_water_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {
+      "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$time", "timezone": "+00:00"}},
+      "totalIntake": {"$sum": {"$toInt": "$intake"}}
+      }
+    },
+    {"$sort": {"totalIntake": -1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "intake": "$totalIntake"}}
+  ]
+
+  query_output_list = list(db.intake_collection.aggregate(max_water_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["intake"] > 0:
+    max_water_in_a_day = query_output_list[0]["intake"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    max_water_in_a_day = 0
+    description = "No records on Water intake"
+
+  max_water_data = {"name": "Maximum Water Intake in a day", "data": max_water_in_a_day, "description": description}
+
+  return max_water_data
+
+def get_min_water_intake(email, db):
+  """
+    Get the Minimum amount of Water Intake by the current user in a day
+  """
+  min_water_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {
+      "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$time", "timezone": "+00:00"}},
+      "totalIntake": {"$sum": {"$toInt": "$intake"}}
+      }
+    },
+    {"$sort": {"totalIntake": 1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "intake": "$totalIntake"}}
+  ]
+
+  query_output_list = list(db.intake_collection.aggregate(min_water_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["intake"] > 0:
+    min_water_in_a_day = query_output_list[0]["intake"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    min_water_in_a_day = 0
+    description = "No records on Water intake"
+
+  min_water_data = {"name": "Minimum Water Intake in a day", "data": min_water_in_a_day, "description": description}
+
+  return min_water_data
+
+def get_avg_water_intake(email, db):
+  """
+    Get the Average amount of Water Intake by the current user in a day
+  """
+  avg_water_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {
+        "_id": {"$dateToString": {"format": "%Y-%m-%d", "date": "$time", "timezone": "+00:00"}},
+        "dailyTotal": {"$sum": {"$toInt": "$intake"}}
+      }
+    },
+    {"$group": {"_id": None, "average": {"$avg": "$dailyTotal"}}
+    }
+  ]
+
+  query_output_list = list(db.intake_collection.aggregate(avg_water_pipeline))
+  
+  if len(query_output_list) > 0 and query_output_list[0]["average"] > 0:
+    avg_water_in_a_day = floor(query_output_list[0]["average"]) 
+    if avg_water_in_a_day > 4000 or avg_water_in_a_day < 1900:
+      description = "Recommended 2-3 litres of water in a day"
+    else:
+      description = "It's always good to maintain around 2-3 litres of water intake per day"
+  else:
+    avg_water_in_a_day = 0
+    description = "No records on Water intake"
+
+  avg_water_data = {"name": "Average Water Intake per day", "data": avg_water_in_a_day, "description": description}
+
+  return avg_water_data
