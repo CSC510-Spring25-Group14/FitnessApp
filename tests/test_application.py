@@ -1,5 +1,4 @@
 from datetime import date
-import json
 
 from flask_pymongo import PyMongo
 import pytest
