@@ -135,7 +135,9 @@ class TestApplication(unittest.TestCase):
                 self.assertEqual(response.status_code, 200)
 
     def test_insights_route(self):
-        # Test insights route as a logged in user
+        """
+            Test insights route as a logged in user
+        """
         with self.app as client:
             with client.session_transaction() as sess:
                 sess["email"] = "testuser@example.com"
@@ -171,7 +173,9 @@ class TestApplication(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
     
     def test_insights_unauthenticated(self):
-        # Test insights route without login
+        """
+            Test insights route without login
+        """
         response = self.app.get("/insights")
         self.assertEqual(response.status_code, 302)
 
