@@ -118,3 +118,79 @@ def get_number_of_reviews_submitted(email, db):
   reviews_submitted_data = {"name": "Number of Reviews Submitted", "data": reviews_submitted_count, "description": description} 
 
   return reviews_submitted_data
+
+def get_max_calorie(email, db):
+  """
+    Get the Maximum number of Calorie consumed by the current user in a day
+  """
+  max_calorie_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "totalCalories": {"$sum": "$calories"}}},
+    {"$sort": {"totalCalories": -1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "calories": "$totalCalories"}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(max_calorie_pipeline))
+  
+  if query_output_list[0]["calories"] > 0:
+    max_calorie_in_a_day = query_output_list[0]["calories"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    max_calorie_in_a_day = 0
+    description = "No records on calorie intake"
+
+  max_calorie_data = {"name": "Maximum Calories in a day", "data": max_calorie_in_a_day, "description": description}
+
+  return max_calorie_data
+
+def get_min_calorie(email, db):
+  """
+    Get the Minimum number of Calorie consumed by the current user in a day
+  """
+  min_calorie_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "totalCalories": {"$sum": "$calories"}}},
+    {"$sort": {"totalCalories": 1}},
+    {"$limit": 1},
+    {"$project": {"_id": 0, "date": "$_id", "calories": "$totalCalories"}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(min_calorie_pipeline))
+  
+  if query_output_list[0]["calories"] > 0:
+    min_calorie_in_a_day = query_output_list[0]["calories"]
+    description = "On " + convert_date_to_words(query_output_list[0]["date"])
+  else:
+    min_calorie_in_a_day = 0
+    description = "No records on calorie intake"
+
+  min_calorie_data = {"name": "Minimum Calories in a day", "data": min_calorie_in_a_day, "description": description}
+
+  return min_calorie_data
+
+def get_avg_calorie_intake(email, db):
+  """
+    Get the Average number of Calorie consumed by the current user in a day
+  """
+  avg_calorie_pipeline = [
+    {"$match": {"email": email}},
+    {"$group": {"_id": "$date", "dailyTotal": {"$sum": "$calories"}}},
+    {"$group": {"_id": None, "averageCalories": {"$avg": "$dailyTotal"}}}
+  ]
+  
+  query_output_list = list(db.calories.aggregate(avg_calorie_pipeline))
+  
+  if query_output_list[0]["averageCalories"] > 0:
+    avg_calorie_in_a_day = floor(query_output_list[0]["averageCalories"])
+    if avg_calorie_in_a_day > 2100 or avg_calorie_in_a_day < 1900:
+      description = "Recommended 2000 calories in a day"
+    else:
+      description = "It's always good to maintain around 2000 calories per day"
+  else:
+    avg_calorie_in_a_day = 0
+    description = "No records on calorie intake"
+
+  avg_calorie_data = {"name": "Minimum Calories in a day", "data": avg_calorie_in_a_day, "description": description}
+
+  return avg_calorie_data
