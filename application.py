@@ -271,7 +271,7 @@ def calories():
                         },
                     )
                 else:
-                    mongo.db.calories.insert(
+                    mongo.db.calories.insert_one(
                         {
                             "date": now,
                             "email": email,

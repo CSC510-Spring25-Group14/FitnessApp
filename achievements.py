@@ -74,8 +74,8 @@ def updateAchievments(activity, email, db):
     This function accepts activity name and email address of the user as input and 
     then checks and updates any achievements related to the activity in MongoDB.
     """
-    activities = db.user_activity.find({'Email': email, 'Activity': activity, 'Status': "Completed"})
-    count = activities.count() + 1
+    query = {'Email': email, 'Activity': activity, 'Status': "Completed"}
+    count = db.user_activity.count_documents(query) + 1
 
     latest_achievement = None
 
@@ -88,7 +88,7 @@ def updateAchievments(activity, email, db):
         achievementExists = db.achievements.find_one({"Name": latest_achievement["name"], "Email": email})
         
         if achievementExists is None:
-            db.achievements.insert({"Name": latest_achievement["name"], "Email": email, "Description": latest_achievement["description"], "Date": date.today().strftime('%Y-%m-%d')})
+            db.achievements.insert_one({"Name": latest_achievement["name"], "Email": email, "Description": latest_achievement["description"], "Date": date.today().strftime('%Y-%m-%d')})
             return latest_achievement
         
     return None
