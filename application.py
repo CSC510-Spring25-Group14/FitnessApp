@@ -1039,7 +1039,7 @@ def submit_reviews():
                 user = mongo.db.user.find_one({"email": email})
                 name = request.form.get("name")
                 review = request.form.get("review")  # Correct the field name
-                mongo.db.reviews.insert_one({"name": name, "review": review})
+                existing_reviews = mongo.db.reviews.find()
                 return render_template(
                     "review.html", form=form, existing_reviews=existing_reviews
                 )
