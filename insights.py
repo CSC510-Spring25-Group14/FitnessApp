@@ -33,10 +33,10 @@ def get_insights(email, db):
   insights.append(get_number_of_reviews_submitted(email,db))
 
   # Max Calories in a day
-  insights.append(get_max_calorie(email, db))
+  insights.append(get_max_calorie_intake(email, db))
 
   # Min Calories in a day
-  insights.append(get_min_calorie(email, db))
+  insights.append(get_min_calorie_intake(email, db))
 
   # Average Calories per day
   insights.append(get_avg_calorie_intake(email, db))
@@ -122,7 +122,7 @@ def get_number_of_reviews_submitted(email, db):
 
   return reviews_submitted_data
 
-def get_max_calorie(email, db):
+def get_max_calorie_intake(email, db):
   """
     Get the Maximum number of Calorie consumed by the current user in a day
   """
@@ -147,7 +147,7 @@ def get_max_calorie(email, db):
 
   return max_calorie_data
 
-def get_min_calorie(email, db):
+def get_min_calorie_intake(email, db):
   """
     Get the Minimum number of Calorie consumed by the current user in a day
   """
@@ -194,7 +194,7 @@ def get_avg_calorie_intake(email, db):
     avg_calorie_in_a_day = 0
     description = "No records on calorie intake"
 
-  avg_calorie_data = {"name": "Minimum Calories in a day", "data": avg_calorie_in_a_day, "description": description}
+  avg_calorie_data = {"name": "Average Calories intake in a day", "data": avg_calorie_in_a_day, "description": description}
 
   return avg_calorie_data
 
@@ -319,7 +319,7 @@ def get_min_burnout(email, db):
   min_burnout_pipeline = [
     {"$match": {"email": email}},
     {"$group": {"_id": "$date", "totalBurnout": {"$sum": "$burnout"}}},
-    {"$sort": {"totalBurnout": -1}},
+    {"$sort": {"totalBurnout": 1}},
     {"$limit": 1},
     {"$project": {"_id": 0, "date": "$_id", "burnout": "$totalBurnout"}}
   ]
@@ -333,7 +333,7 @@ def get_min_burnout(email, db):
     min_burnout_in_a_day = 0
     description = "No records on burnout"
 
-  min_burnout_data = {"name": "Maximum Burnout Calories in a day", "data": min_burnout_in_a_day, "description": description}
+  min_burnout_data = {"name": "Minimum Burnout Calories in a day", "data": min_burnout_in_a_day, "description": description}
 
   return min_burnout_data
 
