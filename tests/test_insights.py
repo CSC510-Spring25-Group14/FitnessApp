@@ -1,6 +1,8 @@
 import pytest
 from application import app, mongo  # Import your Flask app and the `get_insights` function
 from datetime import date
+import os
+import json
 
 @pytest.fixture
 def client():
@@ -16,6 +18,34 @@ def mock_user():
         "email": "mpartha@gmail.com",
         "password": "3g:$*fe9R=@9zx",
     }
+
+def insert_test_calorie_burnout_data():
+    
+    # Set project root directory for standardization.
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+    # JSON data file name
+    file_name = "test_max_min_calorie_burnout_data.json"
+    
+    # Define the path to the CSV file
+    calorie_data_file_path = os.path.join(project_root, "tests", "data", file_name)
+
+    # Load JSON data
+    try:
+        with open(calorie_data_file_path, "r") as file:
+            json_data = json.load(file)
+        
+        if isinstance(json_data, list):
+            mongo.db.calories.insert_many(json_data)
+            print("Test calorie, burnout data inserted successfully")
+        else:
+            print("The JSON file does not contain an array of objects.")
+    except FileNotFoundError:
+        print(f"File not found: {calorie_data_file_path}")
+    except json.JSONDecodeError:
+        print("Error decoding JSON. Please check the file format.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 def test_zero_course_completion_rate(client):
     """
@@ -108,4 +138,79 @@ def test_non_zero_course_completion_rate(client):
     # Get rid of everything related to this user
     mongo.db.user_activity.delete_many({"Email": user["email"]})
     mongo.db.achievements.delete_many({"Email": user["email"]})
+
+def test_get_max_calorie_intake(client):
+    """
+        Test case for when the user has logged their calorie intake, one should be able to retrieve the max calorie intake in a day
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
+
+    # Insert test data
+    insert_test_calorie_burnout_data()
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"1970" in response.data
+    assert b"On March 29, 2025" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
+
+def test_get_min_calorie_intake(client):
+    """
+        Test case for when the user has logged their calorie intake, one should be able to retrieve the min calorie intake in a day
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
+
+    # Insert test data
+    insert_test_calorie_burnout_data()
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"500" in response.data
+    assert b"On April 03, 2025" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
+
+def test_get_avg_calorie_intake(client):
+    """
+        Test case for when the user has logged their calorie intake, one should be able to retrieve the min calorie intake in a day
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
+
+    # Insert test data
+    insert_test_calorie_burnout_data()
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    with open("response.html", "w") as file:
+        file.write(str(response.data)) 
+
+    assert b"1101" in response.data
+    assert b"Recommended 2000 calories in a day" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.calories.delete_many({"email": user["email"]})
 
