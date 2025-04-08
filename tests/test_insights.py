@@ -23,9 +23,6 @@ def insert_test_calorie_burnout_data(data_file_name):
     
     # Set project root directory for standardization.
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-    # JSON data file name
-    file_name = "test_max_min_calorie_burnout_data.json"
     
     # Define the path to the CSV file
     calorie_data_file_path = os.path.join(project_root, "tests", "data", data_file_name)
@@ -222,4 +219,19 @@ def test_get_avg_calorie_intake(client):
 
     # Get rid of everything related to this user
     mongo.db.calories.delete_many({"email": user["email"]})
+
+    # JSON data file name
+    data_file_name = "test_good_avg_calorie_burnout_data.json"
+    
+    # Insert test data ()
+    insert_test_calorie_burnout_data(data_file_name)
+
+        # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    with open("response.html", "w") as file:
+        file.write(str(response.data)) 
+
+    assert b"2013" in response.data
+    assert b"always good to maintain around 2000 calories per day" in response.data
 
