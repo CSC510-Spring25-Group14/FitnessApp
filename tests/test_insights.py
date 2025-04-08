@@ -1,7 +1,4 @@
 import pytest
-from flask import session
-from unittest.mock import patch
-import mongomock
 from application import app, mongo  # Import your Flask app and the `get_insights` function
 from datetime import date
 
