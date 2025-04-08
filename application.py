@@ -425,7 +425,7 @@ def user_profile():
                         },
                     )
                 else:
-                    mongo.db.profile.insert(
+                    mongo.db.profile.insert_one(
                         {
                             "email": email,
                             "date": now,
@@ -986,6 +986,7 @@ def activity_page(activity):
                 }
             )
             flash(f"You have successfully enrolled in {activity}!", "success")
+            print("Enrolled successfully")
 
         elif action == "unenroll" and enrolled:
             # User unenrolls
