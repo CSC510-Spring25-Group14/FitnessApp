@@ -19,7 +19,7 @@ def mock_user():
         "password": "3g:$*fe9R=@9zx",
     }
 
-def insert_test_calorie_burnout_data():
+def insert_test_calorie_burnout_data(data_file_name):
     
     # Set project root directory for standardization.
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -28,7 +28,7 @@ def insert_test_calorie_burnout_data():
     file_name = "test_max_min_calorie_burnout_data.json"
     
     # Define the path to the CSV file
-    calorie_data_file_path = os.path.join(project_root, "tests", "data", file_name)
+    calorie_data_file_path = os.path.join(project_root, "tests", "data", data_file_name)
 
     # Load JSON data
     try:
@@ -151,8 +151,11 @@ def test_get_max_calorie_intake(client):
     # Get rid of everything related to this user
     mongo.db.calories.delete_many({"email": user["email"]})
 
+    # JSON data file name
+    data_file_name = "test_max_min_calorie_burnout_data.json"
+    
     # Insert test data
-    insert_test_calorie_burnout_data()
+    insert_test_calorie_burnout_data(data_file_name)
     
     # Make a GET request to the /insights route
     response = client.get('/insights')
@@ -175,8 +178,11 @@ def test_get_min_calorie_intake(client):
     # Get rid of everything related to this user
     mongo.db.calories.delete_many({"email": user["email"]})
 
+    # JSON data file name
+    data_file_name = "test_max_min_calorie_burnout_data.json"
+    
     # Insert test data
-    insert_test_calorie_burnout_data()
+    insert_test_calorie_burnout_data(data_file_name)
     
     # Make a GET request to the /insights route
     response = client.get('/insights')
@@ -199,8 +205,11 @@ def test_get_avg_calorie_intake(client):
     # Get rid of everything related to this user
     mongo.db.calories.delete_many({"email": user["email"]})
 
-    # Insert test data
-    insert_test_calorie_burnout_data()
+    # JSON data file name
+    data_file_name = "test_max_min_calorie_burnout_data.json"
+    
+    # Insert test data (Recommended 2000 calories in a day)
+    insert_test_calorie_burnout_data(data_file_name)
     
     # Make a GET request to the /insights route
     response = client.get('/insights')
