@@ -6,13 +6,13 @@ import sys
 import os
 from application import ajaxsendrequest, app, mongo
 from flask import Flask, session
-from application import reminder_email
+from application import reminder_email, close_db_connection, schedule_process, signal_handler
 from unittest.mock import MagicMock, patch
 from forms import CalorieForm
 from pymongo import MongoClient
 from flask_mail import Mail
 from insert_db_data import insertexercisedata, insertfooddata
-
+import signal
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
@@ -948,3 +948,52 @@ def test_ajax_approve_request_success(client, mock_mongo):
     mock_mongo.friends.insert_one.assert_called_once_with(
         {"sender": "testuser@example.com", "receiver": "friend@example.com", "accept": True}
     )
+
+# Test for close_db_connection()
+@patch("builtins.print")
+def test_close_db_connection(mock_print):
+    
+    close_db_connection()
+
+    # Assert that the correct print statement was executed
+    mock_print.assert_called_once_with("Database connection closed")
+
+# Test for schedule_process()
+@patch("time.sleep", side_effect=KeyboardInterrupt)  # Simulate KeyboardInterrupt after one iteration
+@patch("schedule.run_pending")
+@patch("builtins.print")
+@patch("sys.exit")
+def test_schedule_process(mock_exit, mock_print, mock_run_pending, mock_sleep):
+    # Call the function (it will raise KeyboardInterrupt due to mocked time.sleep)
+    schedule_process()
+
+    # Assert that schedule.run_pending was called at least once
+    mock_run_pending.assert_called()
+
+    # Assert that the correct print statement was executed
+    mock_print.assert_called_once_with("Scheduler thread interrupted")
+
+    # Assert that sys.exit was called with 0
+    mock_exit.assert_called_once_with(0)
+
+# Test for signal_handler()
+@patch("builtins.print")
+@patch("application.close_db_connection")
+@patch("sys.exit")
+def test_signal_handler(mock_exit, mock_close_db_connection, mock_print):
+    
+    # Simulate a signal and frame (mocked)
+    sig = signal.SIGINT
+    frame = MagicMock()
+
+    # Call the function with a mocked signal and frame
+    signal_handler(sig, frame)
+
+    # Assert that the correct print statement was executed
+    mock_print.assert_called_once_with("You pressed Ctrl+C!")
+
+    # Assert that close_db_connection was called once with mongo_client as argument
+    mock_close_db_connection.assert_called_once()
+
+    # Assert that sys.exit was called with 0
+    mock_exit.assert_called_once_with(0)
