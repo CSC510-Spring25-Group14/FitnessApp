@@ -1,6 +1,6 @@
 import pytest
 from application import app, mongo  # Import your Flask app and the `get_insights` function
-from datetime import date
+from datetime import datetime, date
 import os
 import json
 
@@ -20,16 +20,15 @@ def mock_user():
     }
 
 def insert_test_calorie_burnout_data(data_file_name):
-    
     # Set project root directory for standardization.
     project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
     
     # Define the path to the CSV file
-    calorie_data_file_path = os.path.join(project_root, "tests", "data", data_file_name)
+    data_file_path = os.path.join(project_root, "tests", "data", data_file_name)
 
     # Load JSON data
     try:
-        with open(calorie_data_file_path, "r") as file:
+        with open(data_file_path, "r") as file:
             json_data = json.load(file)
         
         if isinstance(json_data, list):
@@ -38,11 +37,50 @@ def insert_test_calorie_burnout_data(data_file_name):
         else:
             print("The JSON file does not contain an array of objects.")
     except FileNotFoundError:
-        print(f"File not found: {calorie_data_file_path}")
+        print(f"File not found: {data_file_path}")
     except json.JSONDecodeError:
         print("Error decoding JSON. Please check the file format.")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+def insert_test_water_intake_data(data_file_name):
+    # Set project root directory for standardization.
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    
+    # Define the path to the CSV file
+    data_file_path = os.path.join(project_root, "tests", "data", data_file_name)
+    print("In function")
+    # Load JSON data
+    try:
+        with open(data_file_path, "r") as file:
+            json_data = json.load(file)
+
+        convert_dates(json_data)  # Process the dates in the entire JSON structure
+
+        if isinstance(json_data, list):
+            print("In")
+            mongo.db.intake_collection.insert_many(json_data)
+            print("Test water intake data inserted successfully")
+        else:
+            print("The JSON file does not contain an array of objects.")
+    except FileNotFoundError:
+        print(f"File not found: {data_file_path}")
+    except json.JSONDecodeError:
+        print("Error decoding JSON. Please check the file format.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+def convert_dates(obj):
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            if isinstance(value, dict) and "$date" in value:
+                # Convert "$date" string to a Python datetime object
+                obj[key] = datetime.fromisoformat(value["$date"].replace("Z", "+00:00"))
+            else:
+                convert_dates(value)  # Recursively handle nested dictionaries or lists
+    elif isinstance(obj, list):
+        for item in obj:
+            convert_dates(item)
 
 def test_zero_course_completion_rate(client):
     """
@@ -346,3 +384,113 @@ def test_get_avg_burnout_2(client):
 
     assert b"2500" in response.data
     assert b"doing great !" in response.data
+
+def test_get_max_water_intake(client):
+    """
+        Test case for when the user has logged their water intake, one should be able to retrieve the max water intake in a day.
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+    # JSON data file name
+    data_file_name = "test_max_min_water_intake_data.json"
+    
+    # Insert test data
+    insert_test_water_intake_data(data_file_name)
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"2450" in response.data
+    assert b"On April 02, 2025" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+def test_get_min_water_intake(client):
+    """
+        Test case for when the user has logged their water intake, one should be able to retrieve the min water intake in a day.
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+    # JSON data file name
+    data_file_name = "test_max_min_water_intake_data.json"
+    
+    # Insert test data
+    insert_test_water_intake_data(data_file_name)
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"1850" in response.data
+    assert b"On March 25, 2025" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+def test_get_avg_water_intake_1(client):
+    """
+        Test case for when the user has logged their water intake, one should be able to retrieve the average water intake in a day.
+        In this case, we expect a 'always good to maintain around 2-3 litres' message
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+    # JSON data file name
+    data_file_name = "test_max_min_water_intake_data.json"
+    
+    # Insert test data
+    insert_test_water_intake_data(data_file_name)
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"2050" in response.data
+    assert b"always good to maintain around 2-3 litres" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+def test_get_avg_water_intake_2(client):
+    """
+        Test case for when the user has logged their water intake, one should be able to retrieve the average water intake in a day.
+        In this case, we expect a 'Recommended 2-3 litres of water in a day' message
+    """
+    # Simulate a logged-in user by setting session data
+    with client.session_transaction() as sess:
+        user = mock_user()
+        sess['email'] = user["email"]
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
+
+    # JSON data file name
+    data_file_name = "test_good_avg_water_intake_data.json"
+    
+    # Insert test data
+    insert_test_water_intake_data(data_file_name)
+    
+    # Make a GET request to the /insights route
+    response = client.get('/insights')
+
+    assert b"1650" in response.data
+    assert b"Recommended 2-3 litres of water in a day" in response.data
+
+    # Get rid of everything related to this user
+    mongo.db.intake_collection.delete_many({"email": user["email"]})
