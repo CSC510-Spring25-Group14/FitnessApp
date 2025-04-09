@@ -74,7 +74,7 @@ def get_number_of_courses_enrolled(email, db):
   """
     Get the Number of Courses in which the current user enrolled in
   """
-  courses_enrolled_count = db.user_activity.count_documents({"Email": email,"Status": "Enrolled"})
+  courses_enrolled_count = db.user_activity.count_documents({"Email": email})
   description = ""
   
   if courses_enrolled_count == 0:
@@ -96,7 +96,7 @@ def get_number_of_courses_completed(email, db):
   total_courses = courses_enrolled_count + courses_completed_count
 
   if total_courses != 0:
-    completion_rate = (courses_completed_count / total_courses) * 100
+    completion_rate = round((courses_completed_count / total_courses) * 100, 2)
     if completion_rate != 0:
       description = "Completed " + str(completion_rate) + "% of the courses enrolled in"
     else:
