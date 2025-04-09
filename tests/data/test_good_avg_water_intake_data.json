@@ -1,0 +1,67 @@
+[
+  {
+    "intake": 400,
+    "time": { "$date": "2025-03-25T03:53:07.566+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 600,
+    "time": { "$date": "2025-03-25T05:14:05.235+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 650,
+    "time": { "$date": "2025-03-25T08:37:25.609+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 600,
+    "time": { "$date": "2025-03-26T20:59:16.299+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 500,
+    "time": { "$date": "2025-03-26T12:59:13.477+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 600,
+    "time": { "$date": "2025-03-26T12:59:13.477+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 600,
+    "time": { "$date": "2025-03-27T10:41:22.385+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 400,
+    "time": { "$date": "2025-03-27T20:42:39.919+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 800,
+    "time": { "$date": "2025-03-27T16:30:37.476+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 650,
+    "time": { "$date": "2025-04-02T05:49:59.354+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 500,
+    "time": { "$date": "2025-04-02T11:29:07.088+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 600,
+    "time": { "$date": "2025-04-02T11:29:07.088+00:00" },
+    "email": "mpartha@gmail.com"
+  },
+  {
+    "intake": 500,
+    "time": { "$date": "2025-04-02T19:16:04.698+00:00" },
+    "email": "mpartha@gmail.com"
+  }
+]
