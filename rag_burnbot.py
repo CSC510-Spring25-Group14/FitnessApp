@@ -86,10 +86,11 @@ def bot_response(query):
     answer = gemini_response(context, query)
     return answer
 
-paragraphs = extract_text_from_document(DOC_PATH)
-chunks = chunk_text(paragraphs)
-index, chunk_store = build_faiss_index(chunks)
+def initialize_rag():
+    paragraphs = extract_text_from_document(DOC_PATH)
+    chunks = chunk_text(paragraphs)
+    index, chunk_store = build_faiss_index(chunks)
+    return chunks, index
         
-# query = "what is the HRX fitness plan?"
-# answer = bot_response(query)
-# print(answer)
+if __name__=="__main__":
+    chunk_store, index = initialize_rag()
