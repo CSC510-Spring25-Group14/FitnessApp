@@ -44,6 +44,7 @@ import threading
 import atexit
 import signal
 import sys
+from rag_burnbot import bot_response
 
 # Set project root directory for standardization.
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -1086,44 +1087,44 @@ def get_calories(food_item):
     return None
 
 
-bot_state = 0
+# bot_state = 0
 
 
-def bot_response(user_message):
-    user_message = user_message.lower().strip()
-    print(f"bot's received message {user_message}")
-    global bot_state
+# def bot_response(user_message):
+#     user_message = user_message.lower().strip()
+#     print(f"bot's received message {user_message}")
+#     global bot_state
 
-    # if the user ever enters a 0 return the starting message
-    if user_message in ["0", "menu", "start", "reset", "restart"]:
-        bot_state = 0
-        return (
-            f"Hello there! I am BurnBot, and I am here to help you achieve your fitness goals.\n\n"
-            + "Select an option below.\n\n"
-            + "0. View the menu again.\n\n"
-            + "1. Tell me the food item, and I'll fetch its calorie count for you!\n\n"
-        )
+#     # if the user ever enters a 0 return the starting message
+#     if user_message in ["0", "menu", "start", "reset", "restart"]:
+#         bot_state = 0
+#         return (
+#             f"Hello there! I am BurnBot, and I am here to help you achieve your fitness goals.\n\n"
+#             + "Select an option below.\n\n"
+#             + "0. View the menu again.\n\n"
+#             + "1. Tell me the food item, and I'll fetch its calorie count for you!\n\n"
+#         )
 
-    if bot_state == 0:
+#     if bot_state == 0:
 
-        if user_message == "1":  # Option 1 selected
-            bot_state = 1
-            return "Please tell me the food item, and I will fetch its calorie count for you."
+#         if user_message == "1":  # Option 1 selected
+#             bot_state = 1
+#             return "Please tell me the food item, and I will fetch its calorie count for you."
 
-    if bot_state == 1:
-        if user_message:
-            calories = get_calories(user_message)
-            if calories:
-                return f"The calorie count for {user_message} is {calories} kcal."
-            else:
-                return f"Sorry, I couldn't find the calorie count for {user_message}. Please check the spelling or try a different food item. Otherwise, enter 0 to go back to the menu."
+#     if bot_state == 1:
+#         if user_message:
+#             calories = get_calories(user_message)
+#             if calories:
+#                 return f"The calorie count for {user_message} is {calories} kcal."
+#             else:
+#                 return f"Sorry, I couldn't find the calorie count for {user_message}. Please check the spelling or try a different food item. Otherwise, enter 0 to go back to the menu."
 
-    bot_state = 0
-    return (
-        f"Sorry, I didn't understand that. Please select an option below:\n\n"
-        + "0. View the menu again.\n\n"
-        + "1. Tell me the food item, and I'll fetch its calorie count for you!\n\n"
-    )
+#     bot_state = 0
+#     return (
+#         f"Sorry, I didn't understand that. Please select an option below:\n\n"
+#         + "0. View the menu again.\n\n"
+#         + "1. Tell me the food item, and I'll fetch its calorie count for you!\n\n"
+#     )
 
 
 @app.route("/chat", methods=["POST"])
