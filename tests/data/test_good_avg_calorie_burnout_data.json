@@ -1,0 +1,38 @@
+[
+  {
+    "date": "2025-03-25",
+    "email": "mpartha@gmail.com",
+    "calories": 800,
+    "burnout": 1800
+  },
+  {
+    "date": "2025-03-25",
+    "email": "mpartha@gmail.com",
+    "calories": 730,
+    "burnout": 2000
+  },
+  {
+    "date": "2025-03-26",
+    "email": "mpartha@gmail.com",
+    "calories": 2400,
+    "burnout": 1800
+  },
+  {
+    "date": "2025-03-27",
+    "email": "mpartha@gmail.com",
+    "calories": 1400,
+    "burnout": 800
+  },
+  {
+    "date": "2025-03-27",
+    "email": "mpartha@gmail.com",
+    "calories": 660,
+    "burnout": 600
+  },
+  {
+    "date": "2025-03-27",
+    "email": "mpartha@gmail.com",
+    "calories": 50,
+    "burnout": 500
+  }
+]

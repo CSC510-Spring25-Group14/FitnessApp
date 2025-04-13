@@ -62,6 +62,8 @@ BurnOut is an easy-to-use application designed to help users manage their daily 
 
 11. **Reviews:** Users can leave reviews and feedback on the fitness programs they've participated in, sharing their experiences with the community and helping others make informed choices.
 
+12. **Insights:** BurnOut offers advanced insights and data visualizations on user data, such as calorie intake, water intake and burnout data.
+
 This document serves as a comprehensive reference point for users, giving them insight into the functionalities of BurnOut and encouraging them to participate in its development as an open-source software project. As an open-source project, the community can contribute additional features and enhancements to make BurnOut even more robust and tailored to individual needs before its official market release. Furthermore, it assists developers by providing a clear understanding of the codebase and serves as a valuable resource for the project's continued development.
 
 # Table of Contents
@@ -85,6 +87,7 @@ This document serves as a comprehensive reference point for users, giving them i
   - [User Profile](#user-profile)
   - [Workouts](#workouts)
   - [Mindfulness](#mindfulness)
+  - [Insights](#insights)
 - [Installation Steps](#installation-steps)
 - [Source Code](#source-code)
 - [Future Scope](#future-scope)
@@ -173,6 +176,18 @@ This document serves as a comprehensive reference point for users, giving them i
 
 ![image](https://github.com/user-attachments/assets/7143e7e6-56c1-4d98-9b6b-1f36a28ff769)
 
+## Insights
+
+![image](./static/img/readme_images/insights_1.png)
+
+![image](./static/img/readme_images/insights_2.png)
+
+![image](./static/img/readme_images/insights_3.png)
+
+![image](./static/img/readme_images/insights_4.png)
+
+![image](./static/img/readme_images/insights_5.png)
+
 # Installation Steps
 
 Step 1:
@@ -219,11 +234,9 @@ https://github.com/CSC510-Spring25-Group14/FitnessApp/
 # Future Scope
 
 1. Refactor to use ReactJS instead of Django
-2. Complete more extensive testing on application.py
-3. Add more functionality and usefulness to BurnBot, including adding a displayed list of food choices.
-4. Improve progress visualization
-5. Add a prescribed meal plan based on weight loss goals using the food database.
-6. Website customization options.
+2. Add more functionality and usefulness to BurnBot, including adding a displayed list of food choices.
+3. Add a prescribed meal plan based on weight loss goals using the food database.
+4. Website customization options.
 
 # License
 

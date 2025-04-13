@@ -18,6 +18,8 @@ import random
 import string
 from flask_mail import Message
 from apps import App
+from datetime import datetime
+
 
 class Utilities:
     """Class to chech the send_email functionality"""
@@ -43,3 +45,16 @@ class Utilities:
         result_str = ''.join(random.choice(letters) for i in range(length))
         print("Random string of length", length, "is:", result_str)
         return result_str
+
+    
+def convert_date_to_words(date_str):
+    """
+        Convert the given date (YYYY-MM-DD) to Words
+    """
+    # Parse the input date string into a datetime object
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+    
+    # Format the date into words
+    formatted_date = date_obj.strftime("%B %d, %Y")
+    
+    return formatted_date

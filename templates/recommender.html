@@ -1,0 +1,288 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <!-- Page Header -->
+     <!-- In layout.html's <head> section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <div class="text-center mb-5">
+        <h1 style="color: #FFA726; font-weight: bold;">Exercise Recommender</h1>
+        <p style="color: #b3b3b3;">Let us help you find the perfect workout for your fitness goals</p>
+    </div>
+
+    <!-- Input Section -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-lg" style="border-radius: 15px; background-color: #1e1e1e; color: #ffffff;">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4" style="color: #FFA726;">What do you want to workout / what is your goal?</h4>
+                    
+                    <form id="recommender-form">
+                        <div class="mb-4">
+                            <textarea class="form-control" id="goal-input" rows="3" 
+                            style="background-color: #2a2a2a; color: #ffffff; border: 1px solid #444;"></textarea>
+                  <!-- Remove space between tags -->
+                  
+                            <div class="form-text" style="color: #b3b3b3;">
+                                Example: "I want to build upper body strength" or "I need exercises to improve my cardio"
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn" 
+                                    style="background-color: #FFA726; color: #ffffff; font-weight: bold; padding: 10px 25px; border-radius: 8px;">
+                                Get Recommendations
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Output Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card border-0 shadow-lg" id="results-card" style="border-radius: 15px; background-color: #1e1e1e; color: #ffffff; display: none;">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4" style="color: #FFA726;">Your Recommended Workouts</h4>
+                    
+                    <!-- Results will be populated here -->
+                    <div id="recommendation-results">
+                        <!-- Recommendation content will be inserted here via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for form handling -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('recommender-form');
+        const resultsCard = document.getElementById('results-card');
+        const recommendationResults = document.getElementById('recommendation-results');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get the user input
+            const goalInput = document.getElementById('goal-input').value.trim();
+            
+            if (goalInput === '') {
+                alert('Please enter your workout goal');
+                return;
+            }
+            
+            // Show loading state
+            recommendationResults.innerHTML = '<div class="text-center"><div class="spinner-border text-warning" role="status"></div><p class="mt-2">Finding the perfect workouts for you...</p></div>';
+            resultsCard.style.display = 'block';
+            
+            // In a real application, you would send this to your backend
+            // For now, we'll simulate a response with setTimeout
+            setTimeout(function() {
+                // This would normally come from your backend processing
+                generateRecommendations(goalInput);
+            }, 1500);
+        });
+        
+        function generateRecommendations(goal) {
+            // This is where you would normally process the results from your backend
+            // For now, let's create some sample recommendations based on keywords
+            
+            let recommendations = '';
+            const goalLower = goal.toLowerCase();
+            
+            if (goalLower.includes('strength') || goalLower.includes('muscle') || goalLower.includes('build')) {
+                recommendations = `
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Push-Ups</h5>
+                                    <p>Great for building chest, shoulder, and tricep strength.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=IODxDxX7oi4" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Dumbbell Rows</h5>
+                                    <p>Excellent for back strength and overall upper body development.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=roCP6wCXPqo" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Squats</h5>
+                                    <p>The king of exercises for lower body strength and muscle growth.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=YaXPRqUwItQ" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } 
+            else if (goalLower.includes('cardio') || goalLower.includes('endurance') || goalLower.includes('stamina')) {
+                recommendations = `
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">High-Intensity Interval Training</h5>
+                                    <p>Alternating between intense bursts of activity and fixed periods of less-intense activity.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=ml6cT4AZdqI" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Running</h5>
+                                    <p>Classic cardio exercise that improves heart health and builds endurance.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=_kGESn8ArrU" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Jump Rope</h5>
+                                    <p>Excellent for improving coordination while building cardio endurance.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=FJmRQ5iTXKE" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            else if (goalLower.includes('flexibility') || goalLower.includes('stretch') || goalLower.includes('yoga')) {
+                recommendations = `
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Yoga</h5>
+                                    <p>Improves flexibility, mental clarity, and physical strength.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=v7AYKMP6rOE" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Dynamic Stretching</h5>
+                                    <p>Active movements where joints and muscles go through a full range of motion.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=nPHfEnZD1Wk" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                <div class="card-body">
+                                    <h5 class="card-title" style="color: #FFA726;">Pilates</h5>
+                                    <p>Strengthens the core while improving postural alignment and flexibility.</p>
+                                    <div class="d-flex justify-content-end mt-3">
+                                        <a href="https://www.youtube.com/watch?v=K56Z12XNQ5c" target="_blank" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            else {
+                recommendations = `
+                    <div class="text-center">
+                        <p>Based on your goal: "${goal}"</p>
+                        <p>We recommend a mix of different workout types. Here are some suggestions:</p>
+                        <div class="row g-4 mt-3">
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #FFA726;">Full Body Circuit</h5>
+                                        <p>A balanced workout targeting major muscle groups for overall fitness.</p>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <a href="https://www.youtube.com/watch?v=RY7zmV4dn8Y" target="_blank" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #FFA726;">Bodyweight Exercises</h5>
+                                        <p>No equipment needed exercises you can do anywhere.</p>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <a href="https://www.youtube.com/watch?v=UoC_O3HzsH0" target="_blank" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100 border-0" style="background-color: #2a2a2a;">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: #FFA726;">Walking + Mobility</h5>
+                                        <p>Low-impact exercise perfect for beginners or recovery days.</p>
+                                        <div class="d-flex justify-content-end mt-3">
+                                            <a href="https://www.youtube.com/watch?v=0t7h0y1PnxE" target="_blank" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-play-circle me-1"></i> Watch Tutorial
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            recommendationResults.innerHTML = recommendations;
+        }
+    });
+</script>
+
+{% endblock %}
