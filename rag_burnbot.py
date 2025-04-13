@@ -22,6 +22,9 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-pro")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
+index = None
+chunk_store = []
+
 def cleaned_text(text):
     text = re.sub(r"\s+", " ", text)  
     return text.strip()
@@ -51,6 +54,7 @@ def build_faiss_index(chunks):
 
 # Function to retrieve the most relevant text from the document
 def retrieve_context(query, k=3):
+    global index, chunk_store
     query_vector = embedding_model.encode([query])
     _, indices = index.search(np.array(query_vector), k)
     arr = []
@@ -87,10 +91,10 @@ def bot_response(query):
     return answer
 
 def initialize_rag():
+    global index, chunk_store
     paragraphs = extract_text_from_document(DOC_PATH)
     chunks = chunk_text(paragraphs)
     index, chunk_store = build_faiss_index(chunks)
-    return chunks, index
         
 if __name__=="__main__":
     chunk_store, index = initialize_rag()
