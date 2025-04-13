@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container my-5">
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <h1 style="color: #FFA726; font-weight: bold;">Welcome to Burnout</h1>
+        <p style="color: #b3b3b3;">Discover your insights here !</p>
+    </div>
+
+    <!-- Workout Cards Section -->
+    <div class="row g-4">
+
+        {% for insight in insights %}
+        <!-- Dynamically load insights from database-->
+        <div class="col-md-4 align-items-stretch">
+            <div class="card h-100 border-0 shadow-lg"
+                style="border-radius: 15px; background-color: #1e1e1e; color: #ffffff;">
+                <div class="card-body text-center">
+                    <!-- Title -->
+                    <h5 class="card-title text-truncate" style="font-weight: bold; color: #FFA726;" title="{{ insight.name }}">{{ insight.name }}</h5>
+                    <!-- Number in big font -->
+                    <p style="font-size: 2rem; font-weight: bold; color: #ffffff;">{{ insight.data }}</p>
+                    <p style="font-weight: bold; color: #ffffff;">{{ insight.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- Charts section -->
+    <div style="max-width: 800px; height: 400px; margin: 20px auto;">
+        <canvas id="water-chart"></canvas>
+    </div>
+
+    <div style="max-width: 800px; height: 400px; margin: 20px auto;">
+        <canvas id="calorie-chart"></canvas>
+    </div>
+
+    <div style="max-width: 800px; height: 400px; margin: 20px auto;">
+        <canvas id="burnout-chart"></canvas>
+    </div>
+
+    <script>
+        // Pass water intake data from Flask/Jinja template to JavaScript
+        const water_data_json = {{ water_intake_data | tojson }};
+        
+        // Pass calorie intake data from Flask/Jinja template to JavaScript
+        const calorie_data_json = {{ calorie_intake_data | tojson }};
+
+        // Pass burnout data from Flask/Jinja template to JavaScript
+        const burnout_data_json = {{ burnout_data | tojson }};
+        
+        // Render the line chart using Chart.js
+        document.addEventListener('DOMContentLoaded', function() {
+            new Chart(document.getElementById('water-chart'), {
+                type: 'line',
+                data: {
+                    labels: water_data_json.labels,
+                    datasets: [{
+                        label: 'Daily Water Intake',
+                        data: water_data_json.values,
+                        borderColor: '#FFA726', // Orange line color
+                        backgroundColor: 'rgba(255, 167, 38, 0.2)', // Light orange fill under the line
+                        tension: 0.3,
+                        pointBackgroundColor: '#FFA726', // Orange points
+                        pointBorderColor: '#FFFFFF', // White border around points
+                        pointHoverBackgroundColor: '#FFFFFF', // White hover effect for points
+                        pointHoverBorderColor: '#FFA726' // Orange hover border
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {legend: { labels: { color: '#FFFFFF', font: { size: 16 } } }}, // White legend text
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Water intake (in ml)', color: '#FFFFFF' }, // White axis title
+                            ticks: { color: '#FFFFFF'}, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        },
+                        x: {
+                            title: { display: true, text: 'Date', color: '#FFFFFF' }, // White axis title
+                            ticks: { color: '#FFFFFF' }, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('calorie-chart'), {
+                type: 'line',
+                data: {
+                    labels: calorie_data_json.labels,
+                    datasets: [{
+                        label: 'Daily Calorie Intake',
+                        data: calorie_data_json.values,
+                        borderColor: '#FFA726', // Orange line color
+                        backgroundColor: 'rgba(255, 167, 38, 0.2)', // Light orange fill under the line
+                        tension: 0.3,
+                        pointBackgroundColor: '#FFA726', // Orange points
+                        pointBorderColor: '#FFFFFF', // White border around points
+                        pointHoverBackgroundColor: '#FFFFFF', // White hover effect for points
+                        pointHoverBorderColor: '#FFA726' // Orange hover border
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {legend: { labels: { color: '#FFFFFF', font: { size: 16 } } }}, // White legend text
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Calories Intake (in cal)', color: '#FFFFFF' }, // y axis title
+                            ticks: { color: '#FFFFFF'}, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        },
+                        x: {
+                            title: { display: true, text: 'Date', color: '#FFFFFF' }, // x axis title
+                            ticks: { color: '#FFFFFF' }, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        }
+                    }
+                }
+            });
+
+            new Chart(document.getElementById('burnout-chart'), {
+                type: 'line',
+                data: {
+                    labels: burnout_data_json.labels,
+                    datasets: [{
+                        label: 'Daily Burnout',
+                        data: burnout_data_json.values,
+                        borderColor: '#FFA726', // Orange line color
+                        backgroundColor: 'rgba(255, 167, 38, 0.2)', // Light orange fill under the line
+                        tension: 0.3,
+                        pointBackgroundColor: '#FFA726', // Orange points
+                        pointBorderColor: '#FFFFFF', // White border around points
+                        pointHoverBackgroundColor: '#FFFFFF', // White hover effect for points
+                        pointHoverBorderColor: '#FFA726' // Orange hover border
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {legend: { labels: { color: '#FFFFFF', font: { size: 16 } } }}, // White legend text
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Burnout Calories (in cal)', color: '#FFFFFF' }, // y axis title
+                            ticks: { color: '#FFFFFF'}, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        },
+                        x: {
+                            title: { display: true, text: 'Date', color: '#FFFFFF' }, // x axis title
+                            ticks: { color: '#FFFFFF' }, // White tick labels
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' } // Light gray gridlines
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</div>
+{% endblock %}

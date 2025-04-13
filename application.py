@@ -22,6 +22,7 @@ from flask_mail import Mail
 from flask_pymongo import PyMongo
 from tabulate import tabulate
 from achievements import updateAchievments, getAchievements
+from insights import get_insights
 from forms import (
     HistoryForm,
     RegistrationForm,
@@ -272,7 +273,7 @@ def calories():
                         },
                     )
                 else:
-                    mongo.db.calories.insert(
+                    mongo.db.calories.insert_one(
                         {
                             "date": now,
                             "email": email,
@@ -374,6 +375,19 @@ def achievements():
     # return render_template('user_profile.html', status=True, form=form)#
 
 
+@app.route("/insights", methods=["GET", "POST"])
+def insights():
+    """
+    Display the insights from user data
+    """
+
+    if session.get("email"):
+        email = session.get("email")
+        user_insights, water_intake_data, calorie_intake_data, burnout_data = get_insights(email, mongo.db)
+        return render_template("insights.html", insights = user_insights, water_intake_data = water_intake_data, calorie_intake_data = calorie_intake_data, burnout_data = burnout_data)
+    else:
+        return redirect(url_for("login"))
+
 @app.route("/user_profile", methods=["GET", "POST"])
 def user_profile():
     """
@@ -412,7 +426,7 @@ def user_profile():
                         },
                     )
                 else:
-                    mongo.db.profile.insert(
+                    mongo.db.profile.insert_one(
                         {
                             "email": email,
                             "date": now,
@@ -973,6 +987,7 @@ def activity_page(activity):
                 }
             )
             flash(f"You have successfully enrolled in {activity}!", "success")
+            print("Enrolled successfully")
 
         elif action == "unenroll" and enrolled:
             # User unenrolls
@@ -1040,7 +1055,8 @@ def submit_reviews():
                 user = mongo.db.user.find_one({"email": email})
                 name = request.form.get("name")
                 review = request.form.get("review")  # Correct the field name
-                mongo.db.reviews.insert_one({"name": name, "review": review})
+                mongo.db.reviews.insert_one({"name": name, "email": email, "review": review})
+                existing_reviews = mongo.db.reviews.find()
                 return render_template(
                     "review.html", form=form, existing_reviews=existing_reviews
                 )
@@ -1143,3 +1159,7 @@ def chat():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@app.route('/recommender')
+def recommender():
+    return render_template('recommender.html')
