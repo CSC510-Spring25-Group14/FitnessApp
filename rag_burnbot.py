@@ -97,4 +97,4 @@ def initialize_rag():
     index, chunk_store = build_faiss_index(chunks)
         
 if __name__=="__main__":
-    chunk_store, index = initialize_rag()
+    initialize_rag()
