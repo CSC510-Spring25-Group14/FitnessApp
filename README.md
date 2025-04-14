@@ -64,9 +64,10 @@ BurnOut is an easy-to-use application designed to help users manage their daily 
 
 12. **Insights:** BurnOut offers advanced insights and data visualizations on user data, such as calorie intake, water intake and burnout data.
 
+13. **Exercise Recommendation:** Users can input their improvement goals in a text box and they would get a list of exercises/activities to go through along with links attached to them.
+
 This document serves as a comprehensive reference point for users, giving them insight into the functionalities of BurnOut and encouraging them to participate in its development as an open-source software project. As an open-source project, the community can contribute additional features and enhancements to make BurnOut even more robust and tailored to individual needs before its official market release. Furthermore, it assists developers by providing a clear understanding of the codebase and serves as a valuable resource for the project's continued development.
 
-13. **Exercise Recommendation:** Users can input their improvement goals in a text box and they would get a list of exercises/activities to go through along with links attached to them.
 
 # Table of Contents
 
