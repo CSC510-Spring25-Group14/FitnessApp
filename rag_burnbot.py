@@ -22,9 +22,6 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-1.5-pro")
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-index = None
-chunk_store = []
-
 def cleaned_text(text):
     text = re.sub(r"\s+", " ", text)  
     return text.strip()
@@ -53,13 +50,12 @@ def build_faiss_index(chunks):
     return index, chunks
 
 # Function to retrieve the most relevant text from the document
-def retrieve_context(query, k=3):
-    global index, chunk_store
+def retrieve_context(query, index, chunks, k=3):
     query_vector = embedding_model.encode([query])
     _, indices = index.search(np.array(query_vector), k)
     arr = []
     for i in indices[0]:
-        arr.append(chunk_store[i])
+        arr.append(chunks[i])
     return arr
 
 # Function to generate a response using the LLM model
@@ -73,11 +69,9 @@ def gemini_response(context, query):
     except Exception as e:
         return f"Gemini API error: {e}"
 
-def bot_response(query):
-    global bot_state
+def bot_response(query, index, chunks):
     query = query.lower().strip()
     if query in ["0", "menu", "start", "reset", "restart"]:
-        bot_state = 0
         return (
             f"Hello there! I am BurnBot, and I am here to help you achieve your fitness goals.\n\n"
             + "Select an option below.\n\n"
@@ -86,15 +80,15 @@ def bot_response(query):
             + "2. Ask a fitness-related question from the document!\n"
         )
     
-    context = retrieve_context(query)
+    context = retrieve_context(query, index, chunks)
     answer = gemini_response(context, query)
     return answer
 
 def initialize_rag():
-    global index, chunk_store
     paragraphs = extract_text_from_document(DOC_PATH)
     chunks = chunk_text(paragraphs)
     index, chunk_store = build_faiss_index(chunks)
+    return index, chunk_store
         
 if __name__=="__main__":
-    initialize_rag()
+    index, chunk_store = initialize_rag()

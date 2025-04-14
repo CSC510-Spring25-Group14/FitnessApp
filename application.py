@@ -45,7 +45,7 @@ import threading
 import atexit
 import signal
 import sys
-from rag_burnbot import bot_response
+from rag_burnbot import bot_response, initialize_rag
 
 # Set project root directory for standardization.
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -1153,7 +1153,8 @@ def chat():
     if not user_message:
         return jsonify({"status": "error", "message": "Message is required"}), 400
 
-    response = bot_response(user_message)
+    index, chunk_store = initialize_rag()
+    response = bot_response(user_message, index, chunk_store)
     return jsonify({"response": response})
 
 

@@ -65,18 +65,15 @@ def test_chunk_text_remainder():
 # Test 08: Testing Faiss vectors
 def test_build_faiss_index():
     chunks = ["chunk1", "chunk2"]
-    dummy_embed = np.random.rand(2, 384).astype("float32")  
-    index = faiss.IndexFlatL2(384)
-    index.add(dummy_embed)
+    index, _ = build_faiss_index(chunks)
     assert index.ntotal == 2
     
 # Test 09: Retrieving context
-def test_retrieve_context_returns_correct_chunks():
+@patch("rag_burnbot.embedding_model.encode", return_value=np.random.rand(1, 384).astype("float32"))
+def test_retrieve_context_returns_correct_chunks(mock_encode):
     chunks = ["This is about rice.", "This is about bananas."]
     index, chunk_store = build_faiss_index(chunks)
-    rag_burnbot.index = index
-    rag_burnbot.chunk_store = chunk_store
-    context = retrieve_context("rice", k=1)
+    context = retrieve_context("rice", index, chunk_store, k=1)
     assert isinstance(context, list)
     assert len(context) == 1
     
@@ -85,16 +82,13 @@ def test_retrieve_context_returns_correct_chunks():
 def test_retrieve_context_shape(mock_encode):
     chunks = ["This is about rice.", "This is about bananas."]
     index, chunk_store = build_faiss_index(chunks)
-    rag_burnbot.index = index
-    rag_burnbot.chunk_store = chunk_store
-    context = retrieve_context("some query", k=2)
+    context = retrieve_context("some query", index, chunk_store, k=2)
     assert len(context) == 2
     
 # Test 11: Testing invalid index of the context
-def test_retrieve_context_invalid_index(monkeypatch):
+def test_retrieve_context_invalid_index():
     with pytest.raises(AttributeError):
-        rag_burnbot.index = None
-        retrieve_context("query")
+        retrieve_context("query", None, None)
         
 # Test 12: Testing the generated content from model
 @patch("rag_burnbot.model.generate_content")
@@ -112,14 +106,18 @@ def test_gemini_response_failure(mock_generate):
 
 # Test 14:   
 def test_bot_response_menu_reset():
+    chunks = ["Sample context"]
+    index, chunk_store = build_faiss_index(chunks)
     for cmd in ["0", "start", "menu", "reset", "restart"]:
-        assert "BurnBot" in bot_response(cmd)
+        assert "BurnBot" in bot_response(cmd, index, chunk_store)
 
 # Test 15:         
 @patch("rag_burnbot.retrieve_context", return_value=["Calories info"])
 @patch("rag_burnbot.gemini_response", return_value="Calories in rice are 300.")
 def test_bot_response_valid_query(mock_gemini, mock_context):
-    response = bot_response("calories in rice?")
+    chunks = ["Sample context"]
+    index, chunk_store = build_faiss_index(chunks)
+    response = bot_response("calories in rice?", index, chunk_store)
     assert "300" in response
     
 # Test 16: 
@@ -138,8 +136,10 @@ def test_chunk_boundary_content():
 @patch("rag_burnbot.retrieve_context", return_value=["Large context"])
 @patch("rag_burnbot.gemini_response", return_value="Large input handled.")
 def test_bot_response_large_query(mock_gemini, mock_context):
+    chunks = ["Sample context"] * 5
+    index, chunk_store = build_faiss_index(chunks)
     large_q = "What are the effects of carbs on workout?" * 10
-    result = bot_response(large_q)
+    result = bot_response(large_q, index, chunk_store)
     assert "Large input handled." in result
     
 # Test 19:
@@ -154,7 +154,5 @@ def test_faiss_index_wrong_shape():
 def test_retrieve_context_k_greater_than_chunks(mock_encode):
     chunks = ["A"] * 3
     index, chunk_store = build_faiss_index(chunks)
-    rag_burnbot.index = index
-    rag_burnbot.chunk_store = chunk_store
-    context = retrieve_context("test", k=10)
+    context = retrieve_context("test", index, chunk_store, k=10)
     assert len(context) <= 10
