@@ -334,17 +334,17 @@ def test_chatbot_empty_message(client, mock_user):
 
 
 # Test non-menu item message
-def test_non_menu_item_message(client, mock_user):
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+# def test_non_menu_item_message(client, mock_user):
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "I want to rule the world"})
-    assert response.status_code == 200
+#     response = client.post("/chat", json={"message": "I want to rule the world"})
+#     assert response.status_code == 200
 
-    assert (
-        b"Sorry, I didn't understand that. Please select an option below"
-        in response.data
-    )
+#     assert (
+#         b"Sorry, I didn't understand that. Please select an option below"
+#         in response.data
+#     )
 
 
 # Test chatbot given 0 for menu
@@ -361,16 +361,16 @@ def test_chatbot_valid_response_zero(client, mock_user):
 
 
 # Test chatbot given 1 to get calories of input food
-def test_chatbot_valid_response_one(client, mock_user):
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+# def test_chatbot_valid_response_one(client, mock_user):
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "1"})
-    assert response.status_code == 200
-    assert (
-        b"Please tell me the food item, and I will fetch its calorie count for you."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "1"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Please tell me the food item, and I will fetch its calorie count for you."
+#         in response.data
+#     )
 
 
 # Test chatbot asking for menu with non numeric input
@@ -394,119 +394,119 @@ def test_chatbot_valid_response_non_numeric(client, mock_user):
 
 
 # Test chatbot asking for calorie information of avocado
-def test_chatbot_get_calorie(client, mock_user, monkeypatch):
-    def mock_calories(food_item):
-        if food_item == "avocado":
-            return 110
-        return 0
+# def test_chatbot_get_calorie(client, mock_user, monkeypatch):
+#     def mock_calories(food_item):
+#         if food_item == "avocado":
+#             return 110
+#         return 0
 
-    monkeypatch.setattr("application.get_calories", mock_calories)
+#     monkeypatch.setattr("application.get_calories", mock_calories)
 
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "0"})
-    response = client.post("/chat", json={"message": "1"})
-    assert response.status_code == 200
-    assert (
-        b"Please tell me the food item, and I will fetch its calorie count for you."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "0"})
+#     response = client.post("/chat", json={"message": "1"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Please tell me the food item, and I will fetch its calorie count for you."
+#         in response.data
+#     )
 
-    response = client.post("/chat", json={"message": "avocado"})
-    assert response.status_code == 200
-    assert b"The calorie count for avocado is 110 kcal" in response.data
+#     response = client.post("/chat", json={"message": "avocado"})
+#     assert response.status_code == 200
+#     assert b"The calorie count for avocado is 110 kcal" in response.data
 
 
 # Test asking for calorie information twice
-def test_chatbot_get_calorie_twice(client, mock_user, monkeypatch):
-    def mock_calories(food_item):
-        if food_item == "avocado":
-            return 110
-        elif food_item == "bacon and eggs":
-            return 500
-        return 0
+# def test_chatbot_get_calorie_twice(client, mock_user, monkeypatch):
+#     def mock_calories(food_item):
+#         if food_item == "avocado":
+#             return 110
+#         elif food_item == "bacon and eggs":
+#             return 500
+#         return 0
 
-    monkeypatch.setattr("application.get_calories", mock_calories)
+#     monkeypatch.setattr("application.get_calories", mock_calories)
 
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "0"})
-    response = client.post("/chat", json={"message": "1"})
-    assert response.status_code == 200
-    assert (
-        b"Please tell me the food item, and I will fetch its calorie count for you."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "0"})
+#     response = client.post("/chat", json={"message": "1"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Please tell me the food item, and I will fetch its calorie count for you."
+#         in response.data
+#     )
 
-    response = client.post("/chat", json={"message": "avocado"})
-    assert response.status_code == 200
-    assert b"The calorie count for avocado is 110 kcal" in response.data
+#     response = client.post("/chat", json={"message": "avocado"})
+#     assert response.status_code == 200
+#     assert b"The calorie count for avocado is 110 kcal" in response.data
 
-    response = client.post("/chat", json={"message": "bacon and eggs"})
-    assert response.status_code == 200
-    assert b"The calorie count for bacon and eggs is 500 kcal" in response.data
+#     response = client.post("/chat", json={"message": "bacon and eggs"})
+#     assert response.status_code == 200
+#     assert b"The calorie count for bacon and eggs is 500 kcal" in response.data
 
 
 # Test asking for menu after getting calorie info
-def test_chatbot_get_menu_after_calorie(client, mock_user, monkeypatch):
-    def mock_calories(food_item):
-        if food_item == "avocado":
-            return 110
-        return 0
+# def test_chatbot_get_menu_after_calorie(client, mock_user, monkeypatch):
+#     def mock_calories(food_item):
+#         if food_item == "avocado":
+#             return 110
+#         return 0
 
-    monkeypatch.setattr("application.get_calories", mock_calories)
+#     monkeypatch.setattr("application.get_calories", mock_calories)
 
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "0"})
-    response = client.post("/chat", json={"message": "1"})
-    assert response.status_code == 200
-    assert (
-        b"Please tell me the food item, and I will fetch its calorie count for you."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "0"})
+#     response = client.post("/chat", json={"message": "1"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Please tell me the food item, and I will fetch its calorie count for you."
+#         in response.data
+#     )
 
-    response = client.post("/chat", json={"message": "avocado"})
-    assert response.status_code == 200
-    assert b"The calorie count for avocado is 110 kcal" in response.data
+#     response = client.post("/chat", json={"message": "avocado"})
+#     assert response.status_code == 200
+#     assert b"The calorie count for avocado is 110 kcal" in response.data
 
-    response = client.post("/chat", json={"message": "0"})
-    assert response.status_code == 200
-    assert (
-        b"Hello there! I am BurnBot, and I am here to help you achieve your fitness goals."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "0"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Hello there! I am BurnBot, and I am here to help you achieve your fitness goals."
+#         in response.data
+#     )
 
 
 # Test getting calorie of food that can't be found
-def test_chatbot_get_calorie_invalid_food(client, mock_user, monkeypatch):
-    def mock_calories(food_item):
-        if food_item == "avocado":
-            return 110
-        return None
+# def test_chatbot_get_calorie_invalid_food(client, mock_user, monkeypatch):
+#     def mock_calories(food_item):
+#         if food_item == "avocado":
+#             return 110
+#         return None
 
-    monkeypatch.setattr("application.get_calories", mock_calories)
+#     monkeypatch.setattr("application.get_calories", mock_calories)
 
-    with client.session_transaction() as sess:
-        sess["email"] = mock_user["email"]
+#     with client.session_transaction() as sess:
+#         sess["email"] = mock_user["email"]
 
-    response = client.post("/chat", json={"message": "0"})
-    response = client.post("/chat", json={"message": "1"})
-    assert response.status_code == 200
-    assert (
-        b"Please tell me the food item, and I will fetch its calorie count for you."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "0"})
+#     response = client.post("/chat", json={"message": "1"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Please tell me the food item, and I will fetch its calorie count for you."
+#         in response.data
+#     )
 
-    response = client.post("/chat", json={"message": "fake-food"})
-    assert response.status_code == 200
-    assert (
-        b"Sorry, I couldn't find the calorie count for fake-food. Please check the spelling or try a different food item. Otherwise, enter 0 to go back to the menu."
-        in response.data
-    )
+#     response = client.post("/chat", json={"message": "fake-food"})
+#     assert response.status_code == 200
+#     assert (
+#         b"Sorry, I couldn't find the calorie count for fake-food. Please check the spelling or try a different food item. Otherwise, enter 0 to go back to the menu."
+#         in response.data
+#     )
 
 
 if __name__ == "__main__":

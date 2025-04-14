@@ -5,6 +5,7 @@ __pycache__
 .DS_Store
 venv/
 .venv
+.env
 requirements.txt
 
 .vscode/*
@@ -19,3 +20,4 @@ requirements.txt
 
 # Built Visual Studio Code Extensions
 *.vsix
+
