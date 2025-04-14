@@ -66,6 +66,8 @@ BurnOut is an easy-to-use application designed to help users manage their daily 
 
 13. **Exercise Recommendation:** Users can input their improvement goals in a text box and they would get a list of exercises/activities to go through along with links attached to them.
 
+14. **Enhanced BurnBot:** A chatbot feature has been added to the website that will answer any user query pertaining to the workout plans, their durations, who will train them. Thereby saving time to navigate to those pages and readily have information available at one place.
+
 This document serves as a comprehensive reference point for users, giving them insight into the functionalities of BurnOut and encouraging them to participate in its development as an open-source software project. As an open-source project, the community can contribute additional features and enhancements to make BurnOut even more robust and tailored to individual needs before its official market release. Furthermore, it assists developers by providing a clear understanding of the codebase and serves as a valuable resource for the project's continued development.
 
 
@@ -195,44 +197,13 @@ This document serves as a comprehensive reference point for users, giving them i
 
 ![image](https://github.com/user-attachments/assets/69bfd812-d158-46c8-86b0-55de48669b9e)
 
+## BurnBot using RAG
+
+![image](./static/img/readme_images/burnbot.png)
 
 # Installation Steps
 
-Step 1:
-Install MongoDB using the following link:
-
-https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows
-
-Step 2:
-Git Clone the Repository
-
-    git clone https://github.com/CSC510-Spring25-Group14/FitnessApp.git
-
-(OR) Download the .zip file on your local machine
-
-    https://github.com/CSC510-Spring25-Group14/FitnessApp.git
-
-Step 3:
-Install the required packages by running the following command in the terminal
-
-    pip install -r requirements.txt
-
-Step 4:
-Run the following command in the terminal
-
-    python application.py
-
-Step 5:
-Open the URL in your browser:  
- http://127.0.0.1:5000/
-
-### Potential Issues
-
-You may run into dependency issues given there are a significant amount of packages given for this project. If you do, try these steps:
-
-    pip uninstall bson
-    pip uninstall pymongo
-    pip install pymongo
+Follow this [link](./INSTALL.md) to view the installation steps.
 
 # Source Code
 
