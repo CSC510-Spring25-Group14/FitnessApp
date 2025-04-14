@@ -66,6 +66,8 @@ BurnOut is an easy-to-use application designed to help users manage their daily 
 
 This document serves as a comprehensive reference point for users, giving them insight into the functionalities of BurnOut and encouraging them to participate in its development as an open-source software project. As an open-source project, the community can contribute additional features and enhancements to make BurnOut even more robust and tailored to individual needs before its official market release. Furthermore, it assists developers by providing a clear understanding of the codebase and serves as a valuable resource for the project's continued development.
 
+13. **Exercise Recommendation:** Users can input their improvement goals in a text box and they would get a list of exercises/activities to go through along with links attached to them.
+
 # Table of Contents
 
 - [Why use BurnOut?](#why-use-burnout)
@@ -187,6 +189,11 @@ This document serves as a comprehensive reference point for users, giving them i
 ![image](./static/img/readme_images/insights_4.png)
 
 ![image](./static/img/readme_images/insights_5.png)
+
+## Exercise Recommendation
+
+![image](https://github.com/user-attachments/assets/69bfd812-d158-46c8-86b0-55de48669b9e)
+
 
 # Installation Steps
 
